@@ -1,0 +1,171 @@
+@model Projeto1_Web2_IF_johnnata.Models.TbPaciente
+
+@{
+    ViewData["Title"] = "Detalhes do Paciente";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h1><i class="fas fa-user"></i> Detalhes do Paciente</h1>
+            <hr />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-3">
+                <div class="card-header bg-primary text-white">
+                    <h5><i class="fas fa-id-card"></i> Dados Pessoais</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <strong>Nome:</strong><br />
+                            @Html.DisplayFor(model => model.Nome)
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Data de Nascimento:</strong><br />
+                            @Model.DataNascimento.ToString("dd/MM/yyyy")
+                            <small class="text-muted">
+                                (@(DateTime.Now.Year - Model.DataNascimento.Year - (DateTime.Now.DayOfYear < Model.DataNascimento.DayOfYear ? 1 : 0)) anos)
+                            </small>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <strong>CPF:</strong><br />
+                            @Html.DisplayFor(model => model.Cpf)
+                        </div>
+                        <div class="col-md-6">
+                            <strong>RG:</strong><br />
+                            @Html.DisplayFor(model => model.Rg)
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-4">
+                            <strong>Sexo:</strong><br />
+                            @(Model.Sexo == "M" ? "Masculino" : Model.Sexo == "F" ? "Feminino" : Model.Sexo)
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Etnia:</strong><br />
+                            @switch (Model.Etnia)
+                            {
+                                case 1: <text>Branco</text> break;
+                                case 2: <text>Preto</text> break;
+                                case 3: <text>Pardo</text> break;
+                                case 4: <text>Amarelo</text> break;
+                                case 5: <text>Indígena</text> break;
+                                default: <text>@Model.Etnia</text> break;
+                            }
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Profissão:</strong><br />
+                            @(Model.Profissao ?? "-")
+                        </div>
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.NomeResponsavel))
+                    {
+                        <div class="row mb-2">
+                            <div class="col-md-12">
+                                <strong>Nome do Responsável:</strong><br />
+                                @Html.DisplayFor(model => model.NomeResponsavel)
+                            </div>
+                        </div>
+                    }
+                    <div class="row mb-2">
+                        <div class="col-md-12">
+                            <strong>Características:</strong><br />
+                            @if (Model.FlgAtleta == true)
+                            {
+                                <span class="badge bg-success">Atleta</span>
+                            }
+                            @if (Model.FlgGestante == true)
+                            {
+                                <span class="badge bg-info">Gestante</span>
+                            }
+                            @if (Model.FlgAtleta != true && Model.FlgGestante != true)
+                            {
+                                <text>-</text>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header bg-secondary text-white">
+                    <h5><i class="fas fa-map-marker-alt"></i> Endereço</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <div class="col-md-8">
+                            <strong>Endereço:</strong><br />
+                            @(Model.Endereco ?? "-")
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Bairro:</strong><br />
+                            @(Model.Bairro ?? "-")
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <strong>Cidade:</strong><br />
+                            @Html.DisplayFor(model => model.IdCidadeNavigation.Nome)
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Estado:</strong><br />
+                            @Html.DisplayFor(model => model.IdCidadeNavigation.IdEstadoNavigation.Nome)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header bg-info text-white">
+                    <h5><i class="fas fa-phone"></i> Contatos</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <div class="col-md-4">
+                            <strong>Tel. Residencial:</strong><br />
+                            @(Model.TelResidencial ?? "-")
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Tel. Comercial:</strong><br />
+                            @(Model.TelComercial ?? "-")
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Tel. Celular:</strong><br />
+                            @(Model.TelCelular ?? "-")
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if (!string.IsNullOrEmpty(ViewData["InformacaoResumida"]?.ToString()))
+            {
+                <div class="card mb-3">
+                    <div class="card-header bg-warning">
+                        <h5><i class="fas fa-notes-medical"></i> Informações Adicionais</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-0">@ViewData["InformacaoResumida"]</p>
+                    </div>
+                </div>
+            }
+
+            <div class="mt-4">
+                <a asp-action="Edit" asp-route-id="@Model.IdPaciente" class="btn btn-warning">
+                    <i class="fas fa-edit"></i> Editar
+                </a>
+                <a asp-action="Delete" asp-route-id="@Model.IdPaciente" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Excluir
+                </a>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Voltar para Lista
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

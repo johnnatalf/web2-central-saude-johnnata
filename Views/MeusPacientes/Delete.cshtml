@@ -1,0 +1,106 @@
+@model Projeto1_Web2_IF_johnnata.Models.TbPaciente
+
+@{
+    ViewData["Title"] = "Excluir Paciente";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="text-danger"><i class="fas fa-exclamation-triangle"></i> Excluir Paciente</h1>
+            <hr />
+        </div>
+    </div>
+
+    <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading"><i class="fas fa-exclamation-circle"></i> Atenção!</h4>
+        <p>Você tem certeza que deseja excluir este paciente?</p>
+        <hr>
+        <p class="mb-0"><strong>Esta ação não pode ser desfeita!</strong></p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5><i class="fas fa-user"></i> Informações do Paciente</h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-4">Nome</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.Nome)</dd>
+
+                        <dt class="col-sm-4">CPF</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.Cpf)</dd>
+
+                        <dt class="col-sm-4">RG</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.Rg)</dd>
+
+                        <dt class="col-sm-4">Data de Nascimento</dt>
+                        <dd class="col-sm-8">
+                            @Model.DataNascimento.ToString("dd/MM/yyyy")
+                            <small class="text-muted">
+                                (@(DateTime.Now.Year - Model.DataNascimento.Year - (DateTime.Now.DayOfYear < Model.DataNascimento.DayOfYear ? 1 : 0)) anos)
+                            </small>
+                        </dd>
+
+                        <dt class="col-sm-4">Sexo</dt>
+                        <dd class="col-sm-8">@(Model.Sexo == "M" ? "Masculino" : Model.Sexo == "F" ? "Feminino" : Model.Sexo)</dd>
+
+                        @if (!string.IsNullOrEmpty(Model.NomeResponsavel))
+                        {
+                            <dt class="col-sm-4">Responsável</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.NomeResponsavel)</dd>
+                        }
+
+                        <dt class="col-sm-4">Cidade</dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.IdCidadeNavigation.Nome) - 
+                            @Html.DisplayFor(model => model.IdCidadeNavigation.IdEstadoNavigation.Nome)
+                        </dd>
+
+                        @if (!string.IsNullOrEmpty(Model.TelCelular))
+                        {
+                            <dt class="col-sm-4">Telefone Celular</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.TelCelular)</dd>
+                        }
+
+                        @if (!string.IsNullOrEmpty(Model.TelResidencial))
+                        {
+                            <dt class="col-sm-4">Telefone Residencial</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.TelResidencial)</dd>
+                        }
+
+                        @if (!string.IsNullOrEmpty(Model.Profissao))
+                        {
+                            <dt class="col-sm-4">Profissão</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.Profissao)</dd>
+                        }
+                    </dl>
+                </div>
+            </div>
+
+            <form asp-action="Delete" method="post" class="mt-4">
+                <input type="hidden" asp-for="IdPaciente" />
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Confirmar Exclusão
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Cancelar
+                </a>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Confirmação adicional antes de excluir
+        $('form').on('submit', function(e) {
+            if (!confirm('Você realmente deseja excluir este paciente? Esta ação não pode ser desfeita!')) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    </script>
+}

@@ -1,0 +1,335 @@
+@model Projeto1_Web2_IF_johnnata.Models.RegisterProfissionalViewModel
+
+@{
+    ViewData["Title"] = "Cadastro de Profissional";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2 class="text-center mb-4">Cadastro de Profissional</h2>
+        <div class="card">
+            <div class="card-body">
+                <form asp-action="Register" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <!-- Seleção do Tipo de Profissional -->
+                    <div class="form-group mb-3">
+                        <label class="control-label font-weight-bold">Tipo de Profissional *</label>
+                        <div class="btn-group btn-group-toggle w-100" data-toggle="buttons">
+                            <label class="btn btn-outline-primary active" style="cursor: pointer;">
+                                <input type="radio" asp-for="TipoProfissional" value="Medico" checked> Médico
+                            </label>
+                            <label class="btn btn-outline-success" style="cursor: pointer;">
+                                <input type="radio" asp-for="TipoProfissional" value="Nutricionista"> Nutricionista
+                            </label>
+                        </div>
+                        <span asp-validation-for="TipoProfissional" class="text-danger"></span>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- Dados de Acesso -->
+                    <h5 class="mb-3">Dados de Acesso</h5>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label asp-for="Email" class="control-label"></label>
+                            <input asp-for="Email" class="form-control" placeholder="seu@email.com" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Password" class="control-label"></label>
+                            <input asp-for="Password" class="form-control" placeholder="Mínimo 6 caracteres" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="ConfirmPassword" class="control-label"></label>
+                            <input asp-for="ConfirmPassword" class="form-control" />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- Dados Pessoais -->
+                    <h5 class="mb-3">Dados Pessoais</h5>
+                    <div class="row">
+                        <div class="col-md-8 mb-3">
+                            <label asp-for="Nome" class="control-label"></label>
+                            <input asp-for="Nome" class="form-control" />
+                            <span asp-validation-for="Nome" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="Cpf" class="control-label"></label>
+                            <input asp-for="Cpf" id="Cpf" class="form-control" placeholder="000.000.000-00" maxlength="14" />
+                            <span asp-validation-for="Cpf" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="CrmCrn" class="control-label"></label>
+                            <input asp-for="CrmCrn" class="form-control" />
+                            <span asp-validation-for="CrmCrn" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Especialidade" class="control-label"></label>
+                            <input asp-for="Especialidade" class="form-control" />
+                            <span asp-validation-for="Especialidade" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- Endereço -->
+                    <h5 class="mb-3">Endereço</h5>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="Cep" class="control-label"></label>
+                            <input asp-for="Cep" id="Cep" class="form-control" placeholder="00000-000" maxlength="9" />
+                            <span asp-validation-for="Cep" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-8 mb-3">
+                            <label asp-for="Logradouro" class="control-label"></label>
+                            <input asp-for="Logradouro" class="form-control" />
+                            <span asp-validation-for="Logradouro" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label asp-for="Numero" class="control-label"></label>
+                            <input asp-for="Numero" class="form-control" />
+                            <span asp-validation-for="Numero" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-9 mb-3">
+                            <label asp-for="Bairro" class="control-label"></label>
+                            <input asp-for="Bairro" class="form-control" />
+                            <span asp-validation-for="Bairro" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="IdEstado" class="control-label">Estado</label>
+                            <select asp-for="IdEstado" class="form-control" asp-items="ViewBag.IdEstado" id="selectEstado">
+                                <option value="">Selecione o Estado</option>
+                            </select>
+                            <span asp-validation-for="IdEstado" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="IdCidade" class="control-label">Cidade</label>
+                            <select asp-for="IdCidade" class="form-control" asp-items="ViewBag.IdCidade" id="selectCidade">
+                                <option value="">Primeiro selecione o Estado</option>
+                            </select>
+                            <span asp-validation-for="IdCidade" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- Contato -->
+                    <h5 class="mb-3">Contato</h5>
+                    <div class="row">
+                        <div class="col-md-2 mb-3">
+                            <label asp-for="Ddd1" class="control-label"></label>
+                            <input asp-for="Ddd1" class="form-control" placeholder="00" maxlength="2" />
+                            <span asp-validation-for="Ddd1" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="Telefone1" class="control-label"></label>
+                            <input asp-for="Telefone1" id="Telefone1" class="form-control" placeholder="(00) 00000-0000" maxlength="15" />
+                            <span asp-validation-for="Telefone1" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label asp-for="Ddd2" class="control-label"></label>
+                            <input asp-for="Ddd2" class="form-control" placeholder="00" maxlength="2" />
+                            <span asp-validation-for="Ddd2" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="Telefone2" class="control-label"></label>
+                            <input asp-for="Telefone2" id="Telefone2" class="form-control" placeholder="(00) 00000-0000" maxlength="15" />
+                            <span asp-validation-for="Telefone2" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- Dados de Contrato -->
+                    <h5 class="mb-3">
+                        <i class="fas fa-file-contract"></i> Dados de Contrato
+                    </h5>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label class="control-label">
+                                <i class="fas fa-clipboard-list"></i> Contrato *
+                            </label>
+                            <select asp-for="IdContrato" class="form-control" id="IdContrato">
+                                <option value="">Primeiro selecione o tipo de profissional acima</option>
+                            </select>
+                            <span asp-validation-for="IdContrato" class="text-danger"></span>
+                            <small class="form-text text-muted">
+                                <i class="fas fa-info-circle"></i> 
+                                Os planos disponíveis são filtrados automaticamente com base no tipo de profissional selecionado 
+                                (Médico ou Nutricionista).
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="form-group mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">
+                            <i class="fas fa-user-plus"></i> Cadastrar
+                        </button>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <p>Já possui conta? <a asp-area="Identity" asp-page="/Account/Login">Fazer Login</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        // Função para aplicar máscara de CPF
+        function mascaraCpf(valor) {
+            return valor
+                .replace(/\D/g, '') // Remove tudo que não é dígito
+                .replace(/(\d{3})(\d)/, '$1.$2') // Coloca ponto após os 3 primeiros dígitos
+                .replace(/(\d{3})(\d)/, '$1.$2') // Coloca ponto após os 3 segundos dígitos
+                .replace(/(\d{3})(\d{1,2})$/, '$1-$2'); // Coloca hífen antes dos 2 últimos dígitos
+        }
+
+        // Função para aplicar máscara de CEP
+        function mascaraCep(valor) {
+            return valor
+                .replace(/\D/g, '')
+                .replace(/(\d{5})(\d)/, '$1-$2')
+                .replace(/(-\d{3})\d+?$/, '$1'); // Limita a 8 dígitos
+        }
+
+        // Função para aplicar máscara de telefone (celular ou fixo)
+        function mascaraTelefone(valor) {
+            valor = valor.replace(/\D/g, '');
+            
+            if (valor.length <= 10) {
+                // Telefone fixo: (XX) XXXX-XXXX
+                return valor
+                    .replace(/(\d{2})(\d)/, '($1) $2')
+                    .replace(/(\d{4})(\d)/, '$1-$2')
+                    .replace(/(-\d{4})\d+?$/, '$1');
+            } else {
+                // Celular: (XX) XXXXX-XXXX
+                return valor
+                    .replace(/(\d{2})(\d)/, '($1) $2')
+                    .replace(/(\d{5})(\d)/, '$1-$2')
+                    .replace(/(-\d{4})\d+?$/, '$1');
+            }
+        }
+
+        // Script para alternar a seleção visual dos botões de tipo de profissional
+        $(document).ready(function() {
+            // Máscaras de input
+            $('#Cpf').on('input', function() {
+                var valor = $(this).val();
+                $(this).val(mascaraCpf(valor));
+            });
+
+            $('#Cep').on('input', function() {
+                var valor = $(this).val();
+                $(this).val(mascaraCep(valor));
+            });
+
+            $('#Telefone1').on('input', function() {
+                var valor = $(this).val();
+                $(this).val(mascaraTelefone(valor));
+            });
+
+            $('#Telefone2').on('input', function() {
+                var valor = $(this).val();
+                $(this).val(mascaraTelefone(valor));
+            });
+
+            // Botões de tipo de profissional
+            $('input[name="TipoProfissional"]').change(function() {
+                $('.btn-group-toggle label').removeClass('active');
+                $(this).parent().addClass('active');
+                
+                // Carregar contratos/planos baseados no tipo de profissional
+                var tipoProfissional = $(this).val();
+                console.log('Tipo de profissional alterado para:', tipoProfissional);
+                
+                carregarContratos(tipoProfissional);
+            });
+
+            // Carregar contratos inicialmente para o tipo selecionado (Medico por padrão)
+            var tipoProfissionalInicial = $('input[name="TipoProfissional"]:checked').val();
+            if (tipoProfissionalInicial) {
+                console.log('Carregando contratos iniciais para:', tipoProfissionalInicial);
+                carregarContratos(tipoProfissionalInicial);
+            }
+
+            // Função para carregar contratos baseados no tipo de profissional
+            function carregarContratos(tipoProfissional) {
+                var $selectContrato = $('#IdContrato');
+                
+                // Mostrar mensagem de carregamento
+                $selectContrato.empty();
+                $selectContrato.append('<option value="">Carregando planos...</option>');
+                $selectContrato.prop('disabled', true);
+                
+                $.ajax({
+                    url: '@Url.Action("GetContratosByTipoProfissional", "TbProfissionals")',
+                    type: 'GET',
+                    data: { tipoProfissional: tipoProfissional },
+                    success: function(data) {
+                        $selectContrato.empty();
+                        
+                        if (data.length > 0) {
+                            $selectContrato.append('<option value="">Selecione o plano de contrato</option>');
+                            
+                            $.each(data, function(index, item) {
+                                $selectContrato.append($('<option></option>').val(item.value).text(item.text));
+                            });
+                        } else {
+                            $selectContrato.append('<option value="">Nenhum plano disponível para ' + 
+                                (tipoProfissional === 'Medico' ? 'Médicos' : 'Nutricionistas') + '</option>');
+                        }
+                        
+                        $selectContrato.prop('disabled', false);
+                    },
+                    error: function() {
+                        $selectContrato.empty();
+                        $selectContrato.append('<option value="">Erro ao carregar planos. Tente novamente.</option>');
+                        $selectContrato.prop('disabled', false);
+                    }
+                });
+            }
+
+            // Carregar cidades quando o estado for selecionado
+            $('#selectEstado').change(function() {
+                var idEstado = $(this).val();
+                var $selectCidade = $('#selectCidade');
+                
+                if (idEstado) {
+                    $.ajax({
+                        url: '@Url.Action("GetCidadesByEstado", "TbProfissionals")',
+                        type: 'GET',
+                        data: { idEstado: idEstado },
+                        success: function(data) {
+                            $selectCidade.empty();
+                            $selectCidade.append('<option value="">Selecione a Cidade</option>');
+                            
+                            $.each(data, function(index, item) {
+                                $selectCidade.append($('<option></option>').val(item.value).text(item.text));
+                            });
+                            
+                            $selectCidade.prop('disabled', false);
+                        },
+                        error: function() {
+                            alert('Erro ao carregar cidades');
+                        }
+                    });
+                } else {
+                    $selectCidade.empty();
+                    $selectCidade.append('<option value="">Primeiro selecione o Estado</option>');
+                    $selectCidade.prop('disabled', true);
+                }
+            });
+        });
+    </script>
+}

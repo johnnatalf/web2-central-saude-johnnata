@@ -1,0 +1,299 @@
+﻿@model Projeto1_Web2_IF_johnnata.Models.TbProfissional
+
+@{
+    var isManager = ViewData["IsManager"] as bool? ?? false;
+    var canEditCpf = ViewData["CanEditCpf"] as bool? ?? false;
+    
+    ViewData["Title"] = "Editar Profissional";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <h2 class="text-center mb-4">
+            <i class="fas fa-user-edit"></i> Editar Profissional
+        </h2>
+        
+        @if (isManager)
+        {
+            <div class="alert alert-info" role="alert">
+                <i class="fas fa-info-circle"></i> 
+                <strong>Modo Gerente:</strong> Você pode editar todos os campos, incluindo o CPF.
+            </div>
+        }
+        
+        <div class="card">
+            <div class="card-body">
+                <form asp-action="Edit" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    <input type="hidden" asp-for="IdProfissional" />
+                    <input type="hidden" asp-for="IdUser" />
+                    
+                    <!-- Dados Pessoais -->
+                    <h5 class="mb-3">Dados Pessoais</h5>
+                    <div class="row">
+                        <div class="col-md-8 mb-3">
+                            <label asp-for="Nome" class="control-label"></label>
+                            <input asp-for="Nome" class="form-control" />
+                            <span asp-validation-for="Nome" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="Cpf" class="control-label"></label>
+                            @if (canEditCpf)
+                            {
+                                <input asp-for="Cpf" id="Cpf" class="form-control" maxlength="14" />
+                                <small class="form-text text-muted">Como gerente, você pode editar o CPF.</small>
+                            }
+                            else
+                            {
+                                <input asp-for="Cpf" class="form-control" readonly disabled style="background-color: #e9ecef;" />
+                                <input type="hidden" asp-for="Cpf" />
+                                <small class="form-text text-muted">O CPF não pode ser alterado.</small>
+                            }
+                            <span asp-validation-for="Cpf" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="IdTipoProfissional" class="control-label">Tipo de Profissional</label>
+                            <select asp-for="IdTipoProfissional" class="form-control" disabled>
+                                <option value="1" selected="@(Model.IdTipoProfissional == 1)">Médico</option>
+                                <option value="2" selected="@(Model.IdTipoProfissional == 2)">Nutricionista</option>
+                            </select>
+                            <input type="hidden" asp-for="IdTipoProfissional" />
+                            <small class="form-text text-muted">O tipo não pode ser alterado.</small>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="CrmCrn" class="control-label"></label>
+                            <input asp-for="CrmCrn" class="form-control" />
+                            <span asp-validation-for="CrmCrn" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="Especialidade" class="control-label"></label>
+                            <input asp-for="Especialidade" class="form-control" />
+                            <span asp-validation-for="Especialidade" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- Endereço -->
+                    <h5 class="mb-3">Endereço</h5>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="Cep" class="control-label"></label>
+                            <input asp-for="Cep" id="Cep" class="form-control" maxlength="9" />
+                            <span asp-validation-for="Cep" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-8 mb-3">
+                            <label asp-for="Logradouro" class="control-label"></label>
+                            <input asp-for="Logradouro" class="form-control" />
+                            <span asp-validation-for="Logradouro" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label asp-for="Numero" class="control-label"></label>
+                            <input asp-for="Numero" class="form-control" />
+                            <span asp-validation-for="Numero" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-9 mb-3">
+                            <label asp-for="Bairro" class="control-label"></label>
+                            <input asp-for="Bairro" class="form-control" />
+                            <span asp-validation-for="Bairro" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="control-label">Estado</label>
+                            <select id="selectEstado" class="form-control" asp-items="ViewBag.IdEstado">
+                                <option value="">Selecione o Estado</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="IdCidade" class="control-label">Cidade</label>
+                            <select asp-for="IdCidade" class="form-control" asp-items="ViewBag.IdCidade" id="selectCidade"></select>
+                            <span asp-validation-for="IdCidade" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- Contato -->
+                    <h5 class="mb-3">Contato</h5>
+                    <div class="row">
+                        <div class="col-md-2 mb-3">
+                            <label asp-for="Ddd1" class="control-label"></label>
+                            <input asp-for="Ddd1" class="form-control" maxlength="2" />
+                            <span asp-validation-for="Ddd1" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="Telefone1" class="control-label"></label>
+                            <input asp-for="Telefone1" id="Telefone1" class="form-control" maxlength="15" />
+                            <span asp-validation-for="Telefone1" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label asp-for="Ddd2" class="control-label"></label>
+                            <input asp-for="Ddd2" class="form-control" maxlength="2" />
+                            <span asp-validation-for="Ddd2" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="Telefone2" class="control-label"></label>
+                            <input asp-for="Telefone2" id="Telefone2" class="form-control" maxlength="15" />
+                            <span asp-validation-for="Telefone2" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- Dados de Contrato e Acesso -->
+                    <h5 class="mb-3">Dados de Contrato e Acesso</h5>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="IdContrato" class="control-label">Contrato/Plano</label>
+                            <select asp-for="IdContrato" class="form-control" asp-items="ViewBag.IdContrato"></select>
+                            <span asp-validation-for="IdContrato" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="IdTipoAcesso" class="control-label">Tipo de Acesso</label>
+                            <select asp-for="IdTipoAcesso" class="form-control" asp-items="ViewBag.IdTipoAcesso"></select>
+                            <span asp-validation-for="IdTipoAcesso" class="text-danger"></span>
+                        </div>
+                        @if (isManager)
+                        {
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Salario" class="control-label"></label>
+                                <input asp-for="Salario" class="form-control" type="number" step="0.01" />
+                                <span asp-validation-for="Salario" class="text-danger"></span>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="form-group mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-save"></i> Salvar Alterações
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary btn-lg ml-2">
+                            <i class="fas fa-times"></i> Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        // Função para aplicar máscara de CPF
+        function mascaraCpf(valor) {
+            return valor
+                .replace(/\D/g, '')
+                .replace(/(\d{3})(\d)/, '$1.$2')
+                .replace(/(\d{3})(\d)/, '$1.$2')
+                .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+        }
+
+        // Função para aplicar máscara de CEP
+        function mascaraCep(valor) {
+            return valor
+                .replace(/\D/g, '')
+                .replace(/(\d{5})(\d)/, '$1-$2')
+                .replace(/(-\d{3})\d+?$/, '$1');
+        }
+
+        // Função para aplicar máscara de telefone (celular ou fixo)
+        function mascaraTelefone(valor) {
+            valor = valor.replace(/\D/g, '');
+            
+            if (valor.length <= 10) {
+                return valor
+                    .replace(/(\d{2})(\d)/, '($1) $2')
+                    .replace(/(\d{4})(\d)/, '$1-$2')
+                    .replace(/(-\d{4})\d+?$/, '$1');
+            } else {
+                return valor
+                    .replace(/(\d{2})(\d)/, '($1) $2')
+                    .replace(/(\d{5})(\d)/, '$1-$2')
+                    .replace(/(-\d{4})\d+?$/, '$1');
+            }
+        }
+
+        $(document).ready(function() {
+            // Máscaras de input
+            @if (canEditCpf)
+            {
+                <text>
+                $('#Cpf').on('input', function() {
+                    var valor = $(this).val();
+                    $(this).val(mascaraCpf(valor));
+                });
+                
+                if ($('#Cpf').val()) {
+                    $('#Cpf').val(mascaraCpf($('#Cpf').val()));
+                }
+                </text>
+            }
+
+            $('#Cep').on('input', function() {
+                var valor = $(this).val();
+                $(this).val(mascaraCep(valor));
+            });
+
+            $('#Telefone1').on('input', function() {
+                var valor = $(this).val();
+                $(this).val(mascaraTelefone(valor));
+            });
+
+            $('#Telefone2').on('input', function() {
+                var valor = $(this).val();
+                $(this).val(mascaraTelefone(valor));
+            });
+
+            // Aplicar máscaras aos valores já existentes
+            if ($('#Cep').val()) {
+                $('#Cep').val(mascaraCep($('#Cep').val()));
+            }
+            if ($('#Telefone1').val()) {
+                $('#Telefone1').val(mascaraTelefone($('#Telefone1').val()));
+            }
+            if ($('#Telefone2').val()) {
+                $('#Telefone2').val(mascaraTelefone($('#Telefone2').val()));
+            }
+
+            // Carregar cidades quando o estado for selecionado
+            $('#selectEstado').change(function() {
+                var idEstado = $(this).val();
+                var $selectCidade = $('#selectCidade');
+                
+                if (idEstado) {
+                    $.ajax({
+                        url: '@Url.Action("GetCidadesByEstado", "TbProfissionals")',
+                        type: 'GET',
+                        data: { idEstado: idEstado },
+                        success: function(data) {
+                            var cidadeAtual = $selectCidade.val();
+                            $selectCidade.empty();
+                            $selectCidade.append('<option value="">Selecione a Cidade</option>');
+                            
+                            $.each(data, function(index, item) {
+                                $selectCidade.append($('<option></option>').val(item.value).text(item.text));
+                            });
+                            
+                            $selectCidade.val(cidadeAtual);
+                            $selectCidade.prop('disabled', false);
+                        },
+                        error: function() {
+                            alert('Erro ao carregar cidades');
+                        }
+                    });
+                } else {
+                    $selectCidade.empty();
+                    $selectCidade.append('<option value="">Primeiro selecione o Estado</option>');
+                    $selectCidade.prop('disabled', true);
+                }
+            });
+
+            // Trigger inicial se já houver estado selecionado
+            var estadoAtual = $('#selectEstado').val();
+            if (estadoAtual) {
+                $('#selectEstado').trigger('change');
+            }
+        });
+    </script>
+}

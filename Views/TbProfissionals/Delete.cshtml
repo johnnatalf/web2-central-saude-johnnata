@@ -1,0 +1,132 @@
+﻿@model Projeto1_Web2_IF_johnnata.Models.TbProfissional
+
+@{
+    var canDelete = ViewData["CanDelete"] as bool? ?? true;
+    var deleteMessage = ViewData["DeleteMessage"] as string;
+    
+    ViewData["Title"] = "Excluir Profissional";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2 class="text-center text-danger mb-4">
+            <i class="fas fa-exclamation-triangle"></i> Excluir Profissional
+        </h2>
+        
+        @if (!canDelete)
+        {
+            <div class="alert alert-danger" role="alert">
+                <i class="fas fa-ban"></i> 
+                <strong>Não é possível excluir!</strong><br />
+                @deleteMessage
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-warning" role="alert">
+                <i class="fas fa-exclamation-triangle"></i> 
+                <strong>Atenção!</strong> Você está prestes a excluir este profissional. Esta ação não pode ser desfeita.
+            </div>
+        }
+
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0">Dados do Profissional</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">Tipo de Profissional</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.IdTipoProfissional == 1)
+                        {
+                            <span class="badge badge-primary">Médico</span>
+                        }
+                        else if (Model.IdTipoProfissional == 2)
+                        {
+                            <span class="badge badge-success">Nutricionista</span>
+                        }
+                    </dd>
+                    
+                    <dt class="col-sm-4">Nome</dt>
+                    <dd class="col-sm-8"><strong>@Model.Nome</strong></dd>
+                    
+                    <dt class="col-sm-4">CPF</dt>
+                    <dd class="col-sm-8">@Model.Cpf</dd>
+                    
+                    <dt class="col-sm-4">CRM/CRN</dt>
+                    <dd class="col-sm-8">@Model.CrmCrn</dd>
+                    
+                    <dt class="col-sm-4">Especialidade</dt>
+                    <dd class="col-sm-8">@Model.Especialidade</dd>
+                    
+                    <dt class="col-sm-4">Endereço</dt>
+                    <dd class="col-sm-8">
+                        @Model.Logradouro, @Model.Numero - @Model.Bairro
+                        <br />
+                        @if (Model.IdCidadeNavigation != null)
+                        {
+                            <text>@Model.IdCidadeNavigation.Nome</text>
+                        }
+                        - CEP: @Model.Cep
+                    </dd>
+                    
+                    <dt class="col-sm-4">Telefone</dt>
+                    <dd class="col-sm-8">
+                        @if (!string.IsNullOrEmpty(Model.Telefone1))
+                        {
+                            <text>(@Model.Ddd1) @Model.Telefone1</text>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.Telefone2))
+                        {
+                            <br />
+                            <text>(@Model.Ddd2) @Model.Telefone2</text>
+                        }
+                    </dd>
+                    
+                    <dt class="col-sm-4">Plano/Contrato</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.IdContratoNavigation?.IdPlanoNavigation != null)
+                        {
+                            <strong>@Model.IdContratoNavigation.IdPlanoNavigation.Nome</strong>
+                            <br />
+                            <small class="text-muted">Contrato #@Model.IdContratoNavigation.IdContrato</small>
+                        }
+                    </dd>
+                    
+                    <dt class="col-sm-4">Tipo de Acesso</dt>
+                    <dd class="col-sm-8">@Model.IdTipoAcessoNavigation?.Nome</dd>
+                    
+                    @if (Model.Salario.HasValue)
+                    {
+                        <dt class="col-sm-4">Salário</dt>
+                        <dd class="col-sm-8">R$ @Model.Salario.Value.ToString("N2")</dd>
+                    }
+                </dl>
+
+                @if (canDelete)
+                {
+                    <form asp-action="Delete" method="post" class="mt-4">
+                        <input type="hidden" asp-for="IdProfissional" />
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-danger btn-lg" onclick="return confirm('Tem certeza que deseja excluir este profissional?');">
+                                <i class="fas fa-trash"></i> Confirmar Exclusão
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary btn-lg ml-2">
+                                <i class="fas fa-times"></i> Cancelar
+                            </a>
+                        </div>
+                    </form>
+                }
+                else
+                {
+                    <div class="text-center mt-4">
+                        <a asp-action="Index" class="btn btn-secondary btn-lg">
+                            <i class="fas fa-arrow-left"></i> Voltar para a Lista
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
